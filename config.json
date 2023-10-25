@@ -1,0 +1,14 @@
+...
+"streams": {
+    "pattern": {
+      "channels": {
+        "0": {
+          "url": "rtsp://admin:senquire123@192.168.84.18:554/Streaming/channels/101",
+          "debug": false,
+          "audio": true
+        }
+      },
+      "name": "pattern"
+    }
+  }
+...
