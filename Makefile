@@ -1,26 +1,32 @@
-BASE_IMAGE = golang:1.21-alpine3.18
-LINT_IMAGE = golangci/golangci-lint:v1.53.3
+APP=RTSPtoWeb
+SERVER_FLAGS ?= -config config.json
 
-.PHONY: $(shell ls)
+P="\\033[34m[+]\\033[0m"
 
-help:
-	@echo "usage: make [action]"
-	@echo ""
-	@echo "available actions:"
-	@echo ""
-	@echo "  mod-tidy        run go mod tidy"
-	@echo "  format          format source files"
-	@echo "  test            run tests"
-	@echo "  test32          run tests on a 32-bit system"
-	@echo "  test-highlevel  run high-level tests"
-	@echo "  lint            run linter"
-	@echo "  bench           run benchmarks"
-	@echo ""
+build:
+	@echo "$(P) build"
+	GO111MODULE=on go build *.go
 
-blank :=
-define NL
+run:
+	@echo "$(P) run"
+	GO111MODULE=on go run *.go
 
-$(blank)
-endef
+serve:
+	@$(MAKE) server
 
-include scripts/*.mk
+server:
+	@echo "$(P) server $(SERVER_FLAGS)"
+	./${APP} $(SERVER_FLAGS)
+
+test:
+	@echo "$(P) test"
+	bash test.curl
+	bash test_multi.curl
+
+lint:
+	@echo "$(P) lint"
+	go vet
+
+.NOTPARALLEL:
+
+.PHONY: build run server test lint
